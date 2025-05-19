@@ -183,14 +183,19 @@ limit 1;
 -   Find the latest salaries for each employee
 
 ```sql
-SELECT e.emp_no, e.first_name, e.last_name, s.salary, s.from_date
-FROM employees e
-JOIN salaries s ON e.emp_no = s.emp_no
-JOIN (
-    SELECT emp_no, MAX(from_date) AS latest_date
-    FROM salaries
-    GROUP BY emp_no
-) latest_s ON s.emp_no = latest_s.emp_no AND s.from_date = latest_s.latest_date;
+select e.first_name, e.last_name, salaries.emp_no, max(salary)
+from salaries
+join employees.employees e on e.emp_no=salaries.emp_no
+group by emp_no;
+
+select e.emp_no, e.first_name, e.last_name, s.salary, s.from_date
+from employees e
+join salaries s on e.emp_no = s.emp_no
+join (
+    select emp_no, MAX(from_date) as latest_date
+    from salaries
+    group by emp_no
+) latest_s on s.emp_no = latest_s.emp_no and s.from_date = latest_s.latest_date;
 ```
 
 ---
@@ -254,17 +259,17 @@ order by s.salary desc;
     department.
 
 ```sql
-SELECT
-    d.dept_name AS department,
+select 
+    d.dept_name as department,
     e.first_name,
     e.last_name,
-    AVG(s.salary) AS avg_salary
-FROM employees e
-INNER JOIN dept_emp de ON e.emp_no = de.emp_no
-INNER JOIN departments d ON de.dept_no = d.dept_no
-INNER JOIN salaries s ON e.emp_no = s.emp_no
-GROUP BY d.dept_name, e.emp_no, e.first_name, e.last_name
-ORDER BY avg_salary DESC;
+    AVG(s.salary) as avg_salary
+from employees e
+inner join dept_emp de on e.emp_no = de.emp_no
+inner join departments d on de.dept_no = d.dept_no
+inner join salaries s on e.emp_no = s.emp_no
+group by d.dept_name, e.emp_no, e.first_name, e.last_name
+order by avg_salary desc;
 ```
 
 ---

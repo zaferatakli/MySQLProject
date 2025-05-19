@@ -10,11 +10,11 @@ from salaries
 join employees.employees e on e.emp_no=salaries.emp_no
 group by emp_no;
 
-SELECT e.emp_no, e.first_name, e.last_name, s.salary, s.from_date
-FROM employees e
-JOIN salaries s ON e.emp_no = s.emp_no
-JOIN (
-    SELECT emp_no, MAX(from_date) AS latest_date
-    FROM salaries
-    GROUP BY emp_no
-) latest_s ON s.emp_no = latest_s.emp_no AND s.from_date = latest_s.latest_date;
+select e.emp_no, e.first_name, e.last_name, s.salary, s.from_date
+from employees e
+join salaries s on e.emp_no = s.emp_no
+join (
+    select emp_no, MAX(from_date) as latest_date
+    from salaries
+    group by emp_no
+) latest_s on s.emp_no = latest_s.emp_no and s.from_date = latest_s.latest_date;
